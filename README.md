@@ -1,4 +1,4 @@
-# [LOTUS Project Website](https://lotus3d.github.io/)
+# [Lotus-2 project website](https://lotus-2.github.io/)
 
 # License
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />
