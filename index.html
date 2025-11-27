@@ -71,28 +71,27 @@
             </span>
             <span class="author-block">
               <a href="https://haodong2000.github.io/" target="_blank" rel="noopener noreferrer">
-                Haodong Li<sup>12</sup>,
+                Haodong Li<sup>12</sup><strong>*</strong>,
             </a>
             </span>
             <span class="author-block">
               <a href="https://lotus-2.github.io/" target="_blank" rel="noopener noreferrer">
-                Mingzhi Sheng<sup>1</sup></a>,
+                Mingzhi Sheng<sup>1</sup><strong>*</strong>,</a>
             </span>
             <span class="author-block">
                 <a href="https://www.yingcong.me/" target="_blank" rel="noopener noreferrer">
-                Ying-Cong Chen<sup>13&sect;</sup></a>
+                Ying-Cong Chen<sup>13&#9993;</sup></a>
             </span>
           </div>
 
           <div class="is-size-5 publication-authors">
             <span class="author-block"><sup>1</sup>HKUST(GZ)</span>
             <span class="author-block"><sup>2</sup>UC San Diego</span>
-            <!-- <span class="author-block"><sup></sup>Noah's Ark Lab</span> -->
             <span class="author-block"><sup>3</sup>HKUST</span>
             <br>
             <span class="author-block">
-                <!-- <sup>&ddagger;</sup>Equal contribution. -->
-                <sup>&sect;</sup>Corresponding author
+                <strong>*</strong>Equal contribution.
+                <sup>&#9993;</sup>Corresponding author.
             </span>
             <br>
             <span class="author-block" style="font-size:1.4rem">
@@ -122,7 +121,7 @@
               </span>
               <!-- Code Link. -->
               <span class="link-block">
-                <a href="https://github.com/EnVision-Research/Lotus-2" target="_blank" rel="noopener noreferrer"
+                <a href="https://github.com/EnVision-Research/Lotus" target="_blank" rel="noopener noreferrer"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                     <i class="fab fa-github" style="font-size:23px"></i>
@@ -164,11 +163,14 @@
     <div class="hero-body">
       <img id="teaser" width="100%" src="./images/teaser_1.jpg" alt="Teaser 1"/>
       <h2 class="subtitle">
-        We present <strong>Lotus-2</strong>, an advanced estimator for monocular geometric dense prediction.
+        <!-- We present <strong>Lotus-2</strong>, an advanced estimator for monocular geometric dense prediction.
         Using only <strong>0.66%</strong> of the training data compared to MoGe-2,
         Lotus-2
         not only achieves <strong>new SoTA accuracy</strong> but also produces significantly <strong>finer details</strong>.
         Moreover, it performs better in rare and challenging cases, such as oil paintings and transparent objects, highlighting its superior zero-shot generalization.
+ -->
+        <strong>We present Lotus-2, a two-stage deterministic framework for monocular geometric dense prediction.</strong>
+        Our method leverages pre-trained generative model as a deterministic world prior to achieve <strong>new state-of-the-art accuracy</strong> while requiring <strong>remarkably minimal data</strong> (trained on only <strong>0.66%</strong> of the samples used by MoGe-2). This figure demonstrates Lotus-2's robust zero-shot generalization with sharp geometric details, especially in challenging cases like oil paintings and transparent objects.
       </h2>
     </div>
   </div>
@@ -182,7 +184,7 @@
       <div class="column is-four-fifths">
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
-        <p>
+        <!-- <p>
           Recovering pixel-wise geometric properties from a single image is fundamentally ill-posed due to appearance ambiguity and non-injective mappings between 2D observations and 3D structures.
           While discriminative regression models achieve strong performance through large-scale supervision, their success is bounded by dataset realism and limited physical reasoning.
         </p><p>
@@ -194,7 +196,16 @@
         </p><p>
           Using only <strong>59K</strong> training samples—less than <strong>1%</strong> of existing large-scale datasets---Lotus-2 establishes new SoTA results in monocular depth estimation and highly competitive surface normal prediction.
           These results demonstrate that flow matching models can serve as deterministic world priors, enabling efficient, accurate, and physically consistent geometric reasoning beyond traditional generative paradigms.
-        </p>
+        </p> -->
+        <p>Recovering pixel-wise geometric properties from a single image is fundamentally ill-posed due to appearance ambiguity and non-injective mappings between 2D observations and 3D structures. While discriminative regression models achieve strong performance through large-scale supervision, their success is bounded by the scale, quality and diversity of available data and limited physical reasoning. 
+        Recent diffusion models exhibit powerful <strong>world priors</strong> that encode geometry and semantics learned from massive image-text data, yet directly reusing their stochastic generative formulation is suboptimal for deterministic geometric inference: the former is optimized for diverse and high-fidelity image generation, whereas the latter requires stable and accurate predictions. 
+        </p><p>
+        In this work, we propose <strong>Lotus-2</strong>, a two-stage deterministic framework for stable, accurate and fine-grained geometric dense prediction, aiming to provide an optimal adaption protocol to fully exploit the pre-trained generative priors. 
+        </p><p>
+        Specifically, in the first stage, the core predictor employs a single-step deterministic formulation with a clean-data objective and a lightweight local continuity module (LCM) to generate globally coherent structures without grid artifacts. 
+        In the second stage, the detail sharpener performs a constrained multi-step rectified-flow refinement within the manifold defined by the core predictor, enhancing fine-grained geometry through noise-free deterministic flow matching.
+        </p><p>
+        Using only <strong>59K</strong> training samples—less than <strong>1%</strong> of existing large-scale datasets—Lotus-2 establishes new state-of-the-art results in monocular depth estimation and highly competitive surface normal prediction. These results demonstrate that diffusion models can serve as deterministic world priors, enabling high-quality geometric reasoning beyond traditional discriminative and generative paradigms.</p>
         </div>
       </div>
     </div>
@@ -202,23 +213,106 @@
   </div>
 </section>
 
-<!-- <section class="section">
+<section class="section">
   <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
         <h2 class="title is-3">Methodology</h2>
         <div class="content has-text-justified">
-          <h3 class="title has-text-centered">
+          <!-- <h3 class="title has-text-centered">
             XXX
-          </h3>
+          </h3> -->
           <p>
-            XXX
+            <strong>We argue that directly inheriting the stochastic generative formulation—which is optimized for image synthesis—introduces instability and unnecessary complexity for deterministic geometric tasks.</strong> The image synthesis aims at diverse and high-fidelity generation through stochastic multi-step sampling, while the dense prediction requires a deterministic and accurate inference. This fundamental misalignment results in high structural variance and significant prediction errors for dense prediction, thereby compromising overall accuracy. 
+            To better exploit the generative world priors, we propose a decoupled, two-stage adaption protocol. 
+          </p>
+          <img id="teaser" width="100%" src="./images/core_predictor.jpg" alt="Core Predictor"/>
+          <p style="font-size: 0.8rem;">
+            <strong>Adaptation protocol of the core predictor in Lotus-2.</strong> It adopts a single-step formulation ($t=1$) with clean-data prediction to efficiently exploit the world priors of pre-trained FLUX model, where input latent $\mathbf{z_t}$ is equivalent to the image latent $\mathbf{z^x}$, <em>i.e</em>, $\mathbf{z_t}=\mathbf{z_1}=\mathbf{z^x}$ according to the Eq. 11. In addition, there is a pair of Pack-Unpack operations around the diffusion Transformer $f_\theta$ inherited from FLUX, a local continuity module (LCM) $\Lambda$ is employed to mitigate grid artifacts caused by this Unpack operation. 
+          </p>
+          <p>
+            In the first stage, a <strong>core predictor</strong> extracts globally coherent and accurate geometry through a simple yet effective adaptation of the rectified-flow formulation in FLUX. 
+            By systematically analyzing the key designs of stochastic generative formulation, including the stochasticity, multi-step sampling and parameterization type, we identify that a single-step deterministic formulation under a clean-data prediction yields much better stable and accurate results than the original stochastic multi-step residual-based design. 
+            This single-step predictor is further enhanced with a lightweight <strong>local continuity module (LCM)</strong>, which mitigates grid artifacts introduced by the non-parametric Pack-Unpack operations in FLUX while maintaining architectural compatibility and efficiency. 
+          </p>
+          <img id="teaser" width="100%" src="./images/ds-training.jpg" alt="Detail Sharpener"/>
+          <p style="font-size: 0.8rem;">
+            <strong>The training pipeline of detail sharpener.</strong> Starting from a structurally correct but coarse annotation predicted by the core predictor, the detail sharpener learns the transition from coarse to fine-grained annotation via a constrained multi-step rectified-flow within the manifold defined by the core predictor. 
+          </p>
+          <p>
+            In the second stage, an <strong>optional</strong> <strong>detail sharpener</strong> performs a detail refinement through a deterministic multi-step rectified-flow process. 
+            It operates within the constrained manifold defined by the core predictor and learns the transition from the <strong>"accurate"</strong> to <strong>"accurate and fine-grained"</strong> annotation, progressively enriching geometric details while preserving global structure and accuracy. 
+            This design bridges the gap between regression and generative modeling: the former ensures structural stability and correctness, while the latter contributes fine-grained realism. 
+            Consequently, Lotus-2 effectively leverages the generative priors in a disciplined and interpretable manner, achieving both geometric consistency and high-frequency detail fidelity without sacrificing efficiency and stability.
           </p>
         </div>
+      
+        <div class="content has-text-justified">
+          <h3 class="title has-text-centered">
+            Inference
+          </h3>
+          <img id="teaser" width="100%" src="./images/inference.jpg" alt="Inference"/>
+          <p style="font-size: 0.8rem;">
+            <strong>The inference pipeline of Lotus-2.</strong> It is a decoupled, two-stage deterministic pipeline that bridges the regression and geometric refinement. First, the core predictor produces stable and structurally consistent prediction via single-step regression. The detail sharpener then employs a constrained multi-step rectified-flow formulation to iteratively refinement without any stochastic noise. The refinement uses $T_{\text{inf}}' \leq 10$ steps, adjustable based on the desired level of sharpness. This design ensures both structural consistency and fine-grained fidelity in minimal steps.
+          </p>
+          <p>The complete inference process proceeds as follows:</p>
+
+          <ol>
+            <li>
+              The input image $\mathbf{x}$ is first encoded into the VAE latent space using the encoder $E$, yielding the image latent $\mathbf{z^x}$.
+            </li>
+          
+            <li>
+              The image latent $\mathbf{z^x}$ is passed through the core predictor to generate the accurate but coarse prediction $\mathbf{\hat{z}^{y_c}}$.
+              This step guarantees global structural correctness and is performed with maximum efficiency (1 step).
+            </li>
+          
+            <li>
+              The coarse prediction $\mathbf{\hat{z}^{y_c}}$ is then fed into the detail sharpener to obtain the sharp and high-fidelity result $\mathbf{\hat{z}^{y_f}}$.
+              This iterative refinement is achieved by the discrete Euler solver (Eq. 5).
+              Note that this refinement is optional based on the desired level of sharpness.
+            </li>
+          
+            <li>
+              The final refined latent $\mathbf{\hat{z}^{y_f}}$ is decoded back to the pixel space using the VAE decoder $D$ to produce the final geometric prediction $\mathbf{\hat{y}}$.
+            </li>
+          </ol>
+          
+        </div>
+      
       </div>
     </div>
   </div>
-</section> -->
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Experiments</h2>
+        <div class="content has-text-justified">
+        <p>
+          <strong>Quantitative comparison on zero-shot affine-invariant depth estimation</strong> between Lotus-2 and SoTA methods. 
+          The <span style="background-color: rgb(255, 153, 0);">best</span> and 
+            <span style="background-color: rgb(255, 204, 153);">second best</span> performances are highlighted. 
+          $^\S$indicates results re-evaluated by ourselves using the evaluation protocol of Marigold. $^\star$denotes the method relies on pre-trained text-to-image generative models. 
+          Ours Lotus-2 achieves the best overall performance than all other methods. 
+        </p>
+        <img id="teaser" width="100%" src="./images/exp1.png" alt="Experiment 1"/>
+        <p>
+          <strong>Quantitative comparison on zero-shot surface normal estimation</strong> between Lotus-2 and SoTA methods. 
+          <sup>&ddagger;</sup> refers the Marigold normal model as detailed in this <a href="https://huggingface.co/prs-eth/marigold-normals-lcm-v0-1" target="_blank" rel="noopener noreferrer">link</a>. 
+          $^\S$indicates results re-evaluated by us using the evaluation protocol of DSINE. 
+          Our Lotus-2 demonstrates highly competitive quantitative performance, crucially delivering the robust and fine-grained qualitative results as highlighted in Fig. 1. 
+        </p>
+        <img id="teaser" width="100%" src="./images/exp2.png" alt="Experiment 2"/>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
